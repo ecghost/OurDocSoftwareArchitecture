@@ -1,7 +1,6 @@
-import { Layout, Segmented, Input, Menu, Button } from "antd";
+import { Layout, Segmented, Input, Menu, Spin } from "antd";
 import type { SiderMenuItem } from "./MainPage";
 import type React from "react";
-import { PlusOutlined } from "@ant-design/icons";
 
 interface SiderMenuProps {
   collapsed: boolean;
@@ -12,7 +11,8 @@ interface SiderMenuProps {
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
   filteredItems: SiderMenuItem[];
   setSelectedRoom: React.Dispatch<React.SetStateAction<string | null>>;
-  handleSyncButtonClick: Promise<void>;
+  handleSyncButtonClick: (selectedRoom: string) => Promise<void>;
+  menuLoading: boolean;
 }
 
 const SiderMenu: React.FC<SiderMenuProps> = ({
@@ -25,6 +25,7 @@ const SiderMenu: React.FC<SiderMenuProps> = ({
   filteredItems,
   setSelectedRoom,
   handleSyncButtonClick,
+  menuLoading,
 }) => {
   return (
     <Layout.Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -54,16 +55,18 @@ const SiderMenu: React.FC<SiderMenuProps> = ({
           />
         </div>
 
-        <Menu
-          theme="dark"
-          mode="inline"
-          items={filteredItems}
-          onClick={(e) => {
-            setSelectedRoom(e.key);
-            handleSyncButtonClick(e.key);
-          }}
-          style={{ flex: 1, overflow: "auto" }}
-        />
+        <Spin spinning={menuLoading} tip="加载文档中...">
+          <Menu
+            theme="dark"
+            mode="inline"
+            items={filteredItems}
+            onClick={(e) => {
+              setSelectedRoom(e.key);
+              handleSyncButtonClick(e.key);
+            }}
+            style={{ flex: 1, overflow: "auto" }}
+          />
+        </Spin>
       </div>
     </Layout.Sider>
   );

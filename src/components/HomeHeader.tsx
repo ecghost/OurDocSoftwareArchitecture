@@ -22,8 +22,7 @@ import type { MenuProps } from "antd";
 export type HomeHeaderProps = {
   title?: string;
   selectedRoom: string | null;
-  connectionStatus: "connected" | "disconnected" | "connecting" | null;
-  peers: number;
+  connectionStatus: string | null;
   // preview state & toggle
   showPreview: boolean;
   setShowPreview: (v: boolean) => void;
@@ -48,7 +47,6 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
   title = "Markdown 实时协作编辑器",
   selectedRoom,
   connectionStatus,
-  peers,
   showPreview,
   setShowPreview,
   hasAccess,

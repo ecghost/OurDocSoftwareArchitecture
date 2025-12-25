@@ -74,7 +74,7 @@ export const ContentWithEditorAndPreview: React.FC<
 
     setAiMessages((prev) => [
       ...prev,
-      { role: "user", content: aiInput },
+      { role: "user", content: prompt },
       {
         role: "ai",
         content: includeDoc

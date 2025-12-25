@@ -28,6 +28,7 @@ import {
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  type PermissionItem,
   addUsers,
   type AddUsersSubmitRequest,
   changePermission,
@@ -42,6 +43,7 @@ import {
   updateVisibility,
   type User,
 } from "../services/myDocsPage.ts";
+import type { ColumnsType } from "antd/es/table";
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
@@ -81,7 +83,7 @@ const MyDocsPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const docs_res = await fetchDocs(userId);
-        // console.log(docs_res)
+        // console.log(docs_res);
         const docs = docs_res.docs;
         setDocs(docs);
         const users_res = await fetchUsers();
@@ -349,12 +351,12 @@ const MyDocsPage: React.FC = () => {
     }));
   }, [docs]);
 
-  const permissionColumns = [
+  const permissionColumns: ColumnsType<PermissionItem> = [
     {
       title: "用户",
       dataIndex: "username",
       key: "username",
-      render: (_: any, record: any) => (
+      render: (_, record) => (
         <Space>
           <Avatar style={{ backgroundColor: "#87d068" }}>
             {String(record.user_name || record.email || "?")
@@ -373,7 +375,7 @@ const MyDocsPage: React.FC = () => {
       dataIndex: "permission",
       key: "permission",
       width: 240,
-      render: (_: any, record: any) => (
+      render: (_, record) => (
         <Space>
           <Button
             size="small"
@@ -396,7 +398,7 @@ const MyDocsPage: React.FC = () => {
       title: "操作",
       key: "op",
       width: 120,
-      render: (_: any, record: any) => (
+      render: (_, record) => (
         <Popconfirm
           title={`确认移除 ${record.user_name} 的权限吗？`}
           onConfirm={() => handleRemovePermission(record.id)}

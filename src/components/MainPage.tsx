@@ -63,9 +63,6 @@ const MainPage: React.FC = () => {
   // Monaco editor instance ref
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
-  // Connection-like UI (kept simple)
-  const [loading, setLoading] = useState(false);
-
   // Permission / editing toggle
   const [hasAccess, setHasAccess] = useState<boolean>(true);
   const [editingEnabled, setEditingEnabled] = useState<boolean>(false);
@@ -101,6 +98,7 @@ const MainPage: React.FC = () => {
       const val = editorRef.current.getValue();
       setEditorText(val ?? "");
     } catch (e) {
+      console.log(e);
       setEditorText("");
     }
   };
@@ -138,7 +136,6 @@ const MainPage: React.FC = () => {
       message.warning("请先选择一个文档再同步");
       return;
     }
-    setLoading(true);
     /////connecting
     setConnectionStatus("disconnected");
     try {
@@ -164,8 +161,6 @@ const MainPage: React.FC = () => {
     } catch (e) {
       console.error("handleSync error", e);
       message.error("同步失败");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -212,7 +207,7 @@ const MainPage: React.FC = () => {
           editorRef.current.setValue("");
         }
       } catch (e) {
-        /* ignore */
+        console.log(e);
       }
       setEditorText("");
       setHasAccess(true);
@@ -227,7 +222,7 @@ const MainPage: React.FC = () => {
         editorRef.current.setValue("");
       }
     } catch (e) {
-      /* ignore */
+      console.log(e);
     }
     setEditorText("");
     setHasAccess(true);
@@ -236,19 +231,19 @@ const MainPage: React.FC = () => {
 
   // -------------------- editor change -> update preview text --------------------
   // Use a small onDidChangeModelContent listener attached when mount
-  useEffect(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    const disposable = editor.onDidChangeModelContent(() => {
-      try {
-        const v = editor.getValue();
-        setEditorText(v);
-      } catch (e) {
-        /* ignore */
-      }
-    });
-    return () => disposable.dispose();
-  }, [editorRef.current]);
+  // useEffect(() => {
+  //   const editor = editorRef.current;
+  //   if (!editor) return;
+  //   const disposable = editor.onDidChangeModelContent(() => {
+  //     try {
+  //       const v = editor.getValue();
+  //       setEditorText(v);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   });
+  //   return () => disposable.dispose();
+  // }, [editorRef.current]);
 
   // -------------------- SiderMenu helpers --------------------
   const groupRoomsByUser = (rooms: Room[]): SiderMenuItem[] => {
@@ -314,6 +309,7 @@ const MainPage: React.FC = () => {
     filteredItems,
     setSelectedRoom,
     handleSyncButtonClick,
+    menuLoading,
   };
 
   // -------------------- content & header props --------------------
@@ -356,7 +352,7 @@ const MainPage: React.FC = () => {
     avatarInitial,
     avatarColor: avatarColor(displayName),
     accountMenuItems,
-    handleAccountMenuClick: ({ key }: any) => {
+    handleAccountMenuClick: ({ key }: { key: string }) => {
       if (key === "docs") {
         navigate("../mydocs", {
           state: {
