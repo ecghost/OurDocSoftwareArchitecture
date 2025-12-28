@@ -40,6 +40,7 @@ export type HomeHeaderProps = {
   // optional classname / style
   className?: string;
   style?: React.CSSProperties;
+  AIOpen: boolean;
   setAIOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -59,6 +60,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
   handleAccountMenuClick,
   className,
   style,
+  AIOpen,
   setAIOpen,
 }) => {
   // ActionButtons extracted here so we can reuse/arrange them easily
@@ -115,7 +117,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
           shape="circle"
           type="default"
           icon={<RobotOutlined />}
-          onClick={() => setAIOpen(true)}
+          onClick={() => setAIOpen(!AIOpen)}
         />
       </Tooltip>
     </Space>

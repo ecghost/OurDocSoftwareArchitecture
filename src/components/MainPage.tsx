@@ -231,19 +231,19 @@ const MainPage: React.FC = () => {
 
   // -------------------- editor change -> update preview text --------------------
   // Use a small onDidChangeModelContent listener attached when mount
-  // useEffect(() => {
-  //   const editor = editorRef.current;
-  //   if (!editor) return;
-  //   const disposable = editor.onDidChangeModelContent(() => {
-  //     try {
-  //       const v = editor.getValue();
-  //       setEditorText(v);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   });
-  //   return () => disposable.dispose();
-  // }, [editorRef.current]);
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const disposable = editor.onDidChangeModelContent(() => {
+      try {
+        const v = editor.getValue();
+        setEditorText(v);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return () => disposable.dispose();
+  }, [editorRef.current]);
 
   // -------------------- SiderMenu helpers --------------------
   const groupRoomsByUser = (rooms: Room[]): SiderMenuItem[] => {
@@ -366,6 +366,7 @@ const MainPage: React.FC = () => {
         window.location.href = "/login";
       }
     },
+    AIOpen,
     setAIOpen,
   };
 

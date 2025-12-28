@@ -68,15 +68,15 @@ def chat_with_ai():
     if not data:
         return jsonify({"error": "请求体不能为空"}), 400
 
-    room_id = data.get("room_id")
+    room_content = data.get("room_content")
     message = data.get("message")
     include_doc = data.get("include_doc", False)
 
-    if not room_id or not message:
+    if not room_content or not message:
         return jsonify({"error": "room_id or message missing"}), 400
 
     if include_doc and include_doc:
-        document = get_room_content(room_id)
+        document = room_content
         prompt = f"""
 请参考以下文档内容回答问题：
 

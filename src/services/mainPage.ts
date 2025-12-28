@@ -1,4 +1,5 @@
 import request from "../utils/request.ts";
+import airequest from "../utils/request_gpt.ts";
 
 export interface Room {
   room_id: string;
@@ -19,7 +20,7 @@ interface GetContentData {
 }
 
 interface ChatAIParams {
-  room_id: string;
+  room_content: string;
   message: string;
   include_doc: boolean;
 }
@@ -30,7 +31,7 @@ interface ChatAIResult {
 }
 
 export const chatWithAI = (data: ChatAIParams): Promise<ChatAIResult> => {
-  return request.post<ChatAIResult>("/ai/chat", data);
+  return airequest.post<ChatAIResult>("/ai/chat", data);
 };
 
 
