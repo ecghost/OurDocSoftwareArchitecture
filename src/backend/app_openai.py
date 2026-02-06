@@ -5,7 +5,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-openai.api_key = "sk-ovRcRdRZIB1PMdovB6851069A8Ce43A2B330BaA85eC85e8e"
+openai.api_key = ""
 openai.base_url = "https://api.gpt.ge/v1/"
 openai.default_headers = {"x-foo": "true"}
 
